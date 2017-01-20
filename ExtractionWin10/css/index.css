@@ -1,0 +1,68 @@
+﻿body {
+    margin-left: 10px;
+}
+
+#subheader, #filename {
+    margin-top: 10px;
+}
+
+#folder-path-textbox {
+    width: 75%;
+}
+
+#showExplorerAfterExtractSwitch {
+    margin-bottom: 10px;
+}
+
+#progress {
+    height: 10px;
+    width: 100%;
+}
+
+#error-password {
+    display: none;
+    color: darkred;
+}
+
+#password-textbox {
+    width: 100%;
+}
+
+.win-contentdialog-commandspacer {
+    display: none;
+}
+
+/*
+    Adjusts the Styles to match Windows 10
+*/
+
+/* csslint ignore:start */
+.win-toggleswitch-header {
+    margin-bottom: 5px !important;
+    margin-top: 10px !important;
+    -webkit-user-select: none;
+}
+/* csslint ignore:end */
+
+h2 {
+    -webkit-user-select: none;
+    margin-bottom: 10px;
+}
+
+.win-toggleswitch-clickregion {
+    margin: 2px;
+    padding: 5px;
+}
+
+.win-toggleswitch:focus > .win-toggleswitch-clickregion {
+    margin: initial;
+}
+
+input:focus, button:focus, .win-toggleswitch:focus > .win-toggleswitch-clickregion {
+    outline: none;
+    border: 2px solid black;    
+}
+
+div {
+    -webkit-user-select: none;
+}

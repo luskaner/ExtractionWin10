@@ -1,0 +1,13 @@
+{
+  "name": "extraction-win10",
+  "version": "0.0.0",
+  "description": "ExtractionWin10",
+  "main": "app.js",
+  "author": {
+    "name": "luska"
+  },
+  "dependencies": {
+    "electron-context-menu": "^0.8.0",
+    "winjs": "^4.4.0"
+  }
+}

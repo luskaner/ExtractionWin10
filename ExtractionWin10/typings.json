@@ -1,0 +1,9 @@
+{
+  "name": "extraction-win10",
+  "dependencies": {},
+  "globalDependencies": {
+    "electron": "registry:dt/electron#1.4.8+20170104211658",
+    "node": "registry:dt/node#6.0.0+20170106143713",
+    "winjs": "registry:dt/winjs#4.4.0+20170106203657"
+  }
+}
