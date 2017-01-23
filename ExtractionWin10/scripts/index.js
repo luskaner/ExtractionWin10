@@ -13,12 +13,9 @@ else {
     compressedArchive = electron_1.remote.process.argv[1];
 }
 let passwordNeeded = false;
-let SevenZipPath = "7zip/7z.exe";
-if (!debug) {
-    SevenZipPath = path.join(app.getAppPath(), SevenZipPath);
-}
+let SevenZipPath = path.join(app.getAppPath(), "7zip/7z.exe");
 let SevenZip;
-let progressDialog, passwordDialog, errorDialog, progress, filename, passwordTextbox, folderPathEl, showExplorerAfterExtract, errorPassword;
+let progressDialog, passwordDialog, errorDialog, progress, filename, passwordTextbox, folderPathEl, showExplorerAfterExtract, errorPassword, warningCase;
 let regex = /(\d+)%\s(\d+\s)?-\s(.+)/gmi;
 function showFolderSelector() {
     "use strict";
@@ -29,6 +26,26 @@ function showFolderSelector() {
     });
     if (selectedPaths) {
         folderPathEl.value = selectedPaths[0];
+    }
+}
+function procCurrentAction(event) {
+    "use strict";
+    if (event.keyCode === 13) {
+        if (!errorDialog.hidden) {
+            errorDialog.hide();
+        }
+        else if (progressDialog.hidden && passwordDialog.hidden) {
+            extractArchive();
+        }
+    }
+}
+function checkCase(event) {
+    "use strict";
+    if (event.getModifierState("CapsLock")) {
+        warningCase.style.display = "block";
+    }
+    else {
+        warningCase.style.display = "none";
     }
 }
 function loaded() {
@@ -43,13 +60,23 @@ function loaded() {
         }, 100);
         electron_1.remote.getCurrentWindow().show();
     });
+    document.getElementsByTagName("body")[0].addEventListener("keydown", procCurrentAction);
     document.getElementById("browseFolderButton").addEventListener("click", showFolderSelector);
     document.getElementById("extractArchiveButton").addEventListener("click", extractArchive);
     document.getElementById("cancelButton").addEventListener("click", () => { electron_1.remote.app.quit(); });
     progress = document.getElementById("progress");
     filename = document.getElementById("filename");
     errorPassword = document.getElementById("error-password");
+    warningCase = document.getElementById("warning-case");
     passwordTextbox = document.getElementById("password-textbox");
+    passwordTextbox.addEventListener("keydown", (event) => {
+        if (event.keyCode == 13) {
+            passwordDialog.hide(WinJS.UI.ContentDialog.DismissalResult.primary);
+        }
+        else {
+            checkCase(event);
+        }
+    });
     folderPathEl = document.getElementById("folder-path-textbox");
     folderPathEl.value = path.join(path.dirname(compressedArchive), path.basename(compressedArchive, path.extname(compressedArchive)));
     if (debug) {
@@ -80,7 +107,7 @@ function extractArchive() {
             }
             window.setTimeout(function () {
                 electron_1.remote.app.quit();
-            }, 100);
+            }, 1000);
         }
         else {
             progress.value = 0;

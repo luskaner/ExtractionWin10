@@ -15,16 +15,13 @@ if (debug) {
 }
 
 let passwordNeeded: boolean = false;
-let SevenZipPath: string = "7zip/7z.exe";
-if (!debug) {
-    SevenZipPath = path.join(app.getAppPath(), SevenZipPath);
-}
+let SevenZipPath: string = path.join(app.getAppPath(), "7zip/7z.exe");
 
 let SevenZip: ChildProcess;
 let progressDialog: WinJS.UI.ContentDialog, passwordDialog: WinJS.UI.ContentDialog,
     errorDialog: WinJS.UI.ContentDialog, progress: HTMLProgressElement, filename: HTMLDivElement,
     passwordTextbox: HTMLInputElement, folderPathEl: HTMLInputElement, showExplorerAfterExtract: WinJS.UI.ToggleSwitch,
-    errorPassword: HTMLDivElement;
+    errorPassword: HTMLDivElement, warningCase: HTMLDivElement;
 let regex: RegExp = /(\d+)%\s(\d+\s)?-\s(.+)/gmi;
 
 function showFolderSelector(): void {
@@ -43,6 +40,26 @@ function showFolderSelector(): void {
     }
 }
 
+function procCurrentAction(event: KeyboardEvent): void {
+    "use strict";
+    if (event.keyCode === 13) {
+        if (!errorDialog.hidden) {
+            errorDialog.hide();
+        } else if (progressDialog.hidden && passwordDialog.hidden) {
+            extractArchive();
+        }
+    }
+}
+
+function checkCase(event: KeyboardEvent): void {
+    "use strict";
+    if (event.getModifierState("CapsLock")) {
+        warningCase.style.display = "block";
+    } else {
+        warningCase.style.display = "none";
+    }
+}
+
 function loaded(): void {
     "use strict";
     WinJS.UI.processAll().then(() => {
@@ -56,6 +73,7 @@ function loaded(): void {
         remote.getCurrentWindow().show();
     });
 
+    document.getElementsByTagName("body")[0].addEventListener("keydown", procCurrentAction);
     document.getElementById("browseFolderButton").addEventListener("click", showFolderSelector);
     document.getElementById("extractArchiveButton").addEventListener("click", extractArchive);
     document.getElementById("cancelButton").addEventListener("click", () => { remote.app.quit(); });
@@ -63,7 +81,16 @@ function loaded(): void {
     progress = document.getElementById("progress") as HTMLProgressElement;
     filename = document.getElementById("filename") as HTMLDivElement;
     errorPassword = document.getElementById("error-password") as HTMLDivElement;
+    warningCase = document.getElementById("warning-case") as HTMLDivElement;
     passwordTextbox = document.getElementById("password-textbox") as HTMLInputElement;
+    passwordTextbox.addEventListener("keydown", (event: KeyboardEvent) => {
+        if (event.keyCode == 13) {
+            passwordDialog.hide(WinJS.UI.ContentDialog.DismissalResult.primary);
+        } else {
+            checkCase(event);
+        }
+    });
+
     folderPathEl = document.getElementById("folder-path-textbox") as HTMLInputElement;
     folderPathEl.value = path.join(path.dirname(compressedArchive), path.basename(compressedArchive, path.extname(compressedArchive)));
     if (debug) {
@@ -95,7 +122,7 @@ function extractArchive(): void {
             }
             window.setTimeout(function (): void {
                 remote.app.quit();
-            }, 100);
+            }, 1000);
         } else {
             progress.value = 0;
         }

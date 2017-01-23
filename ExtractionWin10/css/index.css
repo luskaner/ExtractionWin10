@@ -24,6 +24,11 @@
     color: darkred;
 }
 
+#warning-case {
+    display: none;
+    color: darkorange;
+}
+
 #password-textbox {
     width: 100%;
 }

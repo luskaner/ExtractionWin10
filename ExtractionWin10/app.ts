@@ -6,7 +6,7 @@ import * as electron_context_menu from "electron-context-menu";
 // keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: Electron.BrowserWindow;
-global["debug"] = true;
+global["debug"] = false;
 
 function createWindow(): void {
     "use strict";
@@ -14,6 +14,12 @@ function createWindow(): void {
         if (process.argv.length !== 2) {
             app.quit();
         }
+    }
+
+    let show = false;
+
+    if (global["debug"]){
+        show = true;
     }
 
     // create the browser window.
@@ -24,7 +30,7 @@ function createWindow(): void {
         title: "Extraer carpetas comprimidas",
         icon: "icon.ico",
         resizable: false,
-        show: false
+        show: show
     });
 
     if (global["debug"]) {

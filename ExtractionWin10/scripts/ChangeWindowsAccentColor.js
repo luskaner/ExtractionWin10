@@ -1,10 +1,6 @@
 ﻿path = require("path");
 app = require("electron").remote.app;
-let SystemColorGetterPath = "color/SystemColorGetter.exe";
-
-if (!require("electron").remote.getGlobal("debug")) {
-    SystemColorGetterPath = path.join(app.getAppPath(), SystemColorGetterPath);
-}
+let SystemColorGetterPath = path.join(app.getAppPath(), "/color/SystemColorGetter.exe");
 
 function getColorValue(callback) {
     if (callback) {

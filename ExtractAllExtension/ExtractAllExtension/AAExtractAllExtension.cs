@@ -1,6 +1,9 @@
 ﻿using SharpShell.Attributes;
 using SharpShell.SharpContextMenu;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -23,7 +26,8 @@ namespace ExtractAllExtension
             //  Create a 'count lines' item.
             var itemExtractAll = new ToolStripMenuItem
             {
-                Text = "Extraer todo..."
+                Text = "Extraer todo...",
+                Image = new Icon(Properties.Resources.Icon, new Size(16, 16)).ToBitmap()
             };
 
             //  When we click, we'll call the 'CountLines' function.
@@ -44,8 +48,7 @@ namespace ExtractAllExtension
                 firstFilePath = filePath;
                 break;
             }
-
-            Process.Start(@"S:\Descargas\electron-v1.4.14-win32-x64\ExtractionWin10.exe", '"' + firstFilePath + '"');
+            Process.Start(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\ExtractionWin10.exe"), '"' + firstFilePath + '"');
         }
     }
 }

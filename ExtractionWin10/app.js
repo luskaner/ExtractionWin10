@@ -6,13 +6,17 @@ const electron_context_menu = require("electron-context-menu");
 // keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
-global["debug"] = true;
+global["debug"] = false;
 function createWindow() {
     "use strict";
     if (!global["debug"]) {
         if (process.argv.length !== 2) {
             electron_1.app.quit();
         }
+    }
+    let show = false;
+    if (global["debug"]) {
+        show = true;
     }
     // create the browser window.
     win = new electron_1.BrowserWindow({
@@ -22,7 +26,7 @@ function createWindow() {
         title: "Extraer carpetas comprimidas",
         icon: "icon.ico",
         resizable: false,
-        show: false
+        show: show
     });
     if (global["debug"]) {
         win.setSize(win.getSize()[0] * 2, win.getSize()[1]);
