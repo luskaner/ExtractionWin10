@@ -1,3 +1,0 @@
-﻿# ExtractionWin10
-
-
